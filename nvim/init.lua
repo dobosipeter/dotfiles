@@ -170,6 +170,13 @@ require("lspconfig").pyright.setup {
   capabilities = require("cmp_nvim_lsp").default_capabilities(),
 }
 
+-- Setup Clangd LSP for C++
+require("lspconfig").clangd.setup {
+  cmd = { "clangd", "--background-index" },
+  capabilities = require("cmp_nvim_lsp").default_capabilities(),
+  filetypes = { "c", "cpp" },
+}
+
 -- Set colorscheme
 vim.cmd("colorscheme kanagawa-dragon")
 
