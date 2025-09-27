@@ -28,8 +28,9 @@ require("lazy").setup({
     { "rebelot/kanagawa.nvim" },
     {
       "neovim/nvim-lspconfig",
-      dependencies = { "williamboman/nvim-lsp-installer" },
     },
+    { "williamboman/mason.nvim" }, 
+    { "williamboman/mason-lspconfig.nvim", dependencies = { "neovim/nvim-lspconfig" } },
     {
       "nvimtools/none-ls.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
@@ -73,6 +74,15 @@ require("lazy").setup({
     },
   },
   checker = { enabled = true },
+})
+
+-- Mason: installs/updates LSP servers, linters, formatters
+require("mason").setup()
+
+-- Mason-LSPConfig: bridge between Mason and Neovim’s LSP
+require("mason-lspconfig").setup({
+  ensure_installed = { "basedpyright", "clangd" },
+  automatic_installation = true,
 })
 
 -- Setup Null LS
@@ -164,18 +174,21 @@ cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 -- Load LuaSnip snippets
 require("luasnip.loaders.from_vscode").lazy_load()
 
--- Setup Pyright LSP
-require("lspconfig").pyright.setup {
-  cmd = { "pyright-langserver", "--stdio" },
-  capabilities = require("cmp_nvim_lsp").default_capabilities(),
-}
+-- Neovim 0.11+ LSP style
+local caps = require("cmp_nvim_lsp").default_capabilities()
 
--- Setup Clangd LSP for C++
-require("lspconfig").clangd.setup {
-  cmd = { "clangd", "--background-index" },
-  capabilities = require("cmp_nvim_lsp").default_capabilities(),
-  filetypes = { "c", "cpp" },
-}
+vim.lsp.config('basedpyright', {
+  capabilities = caps,
+})
+
+vim.lsp.enable('basedpyright')
+
+-- clangd (needs utf-16 offsetEncoding)
+local clangd_caps = vim.tbl_deep_extend("force", {}, caps, { offsetEncoding = { "utf-16" } })
+vim.lsp.config('clangd', {
+  capabilities = clangd_caps,
+})
+vim.lsp.enable('clangd')
 
 -- Set colorscheme
 vim.cmd("colorscheme kanagawa-dragon")
