@@ -7,6 +7,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = "number"
+vim.opt.clipboard = "unnamedplus"
 
 -- Download and setup Lazy plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -35,6 +36,7 @@ require("lazy").setup({
       "nvimtools/none-ls.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
     },
+    { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
     {
       "L3MON4D3/LuaSnip",
       dependencies = { "rafamadriz/friendly-snippets" },
@@ -75,6 +77,12 @@ require("lazy").setup({
   },
   checker = { enabled = true },
 })
+
+require("nvim-treesitter.configs").setup({
+  ensure_installed = { "lua", "vim", "vimdoc", "python", "cpp" },
+  highlight = { enable = true },
+})
+
 
 -- Mason: installs/updates LSP servers, linters, formatters
 require("mason").setup()
@@ -195,3 +203,15 @@ vim.cmd("colorscheme kanagawa-dragon")
 
 -- Set nvim-tree keymap
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
+
+-- Use ripgrep for :grep / :vimgrep if available
+if vim.fn.executable("rg") == 1 then
+  -- search recursively, smart-case, include dotfiles, follow symlinks
+  vim.opt.grepprg = "rg --vimgrep --smart-case --hidden --follow --no-heading --color=never"
+  vim.opt.grepformat = "%f:%l:%c:%m"
+end
+
+if vim.fn.executable("rg") == 1 then
+  vim.opt.grepprg = "rg --vimgrep --smart-case --hidden --follow --no-heading --color=never --glob '!.git/'"
+end
+
