@@ -9,6 +9,15 @@ vim.opt.relativenumber = true
 vim.opt.signcolumn = "number"
 vim.opt.clipboard = "unnamedplus"
 
+if vim.fn.has("android") == 1 or (vim.env.PREFIX or ""):match("com.termux") then
+  vim.g.clipboard = {
+    name = "termux-clipboard",
+    copy = {["+"] = "termux-clipboard-set", ["*"] = "termux-clipboard-set"},
+    paste = {["+"] = "termux-clipboard-get", ["*"] = "termux-clipboard-get"},
+    cache_enabled = 0,
+  }
+end
+
 -- Download and setup Lazy plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -17,7 +26,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
@@ -27,52 +36,49 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     { "rebelot/kanagawa.nvim" },
-    {
-      "neovim/nvim-lspconfig",
-    },
+    { "neovim/nvim-lspconfig", },
+    { "WhoIsSethDaniel/mason-tool-installer.nvim" },
     { "williamboman/mason.nvim" }, 
-    { "williamboman/mason-lspconfig.nvim", dependencies = { "neovim/nvim-lspconfig" } },
     {
-      "nvimtools/none-ls.nvim",
-      dependencies = { "nvim-lua/plenary.nvim" },
-    },
-    { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	"williamboman/mason-lspconfig.nvim",
+	dependencies = { "neovim/nvim-lspconfig" } },
     {
-      "L3MON4D3/LuaSnip",
-      dependencies = { "rafamadriz/friendly-snippets" },
+	"nvimtools/none-ls.nvim",
+	dependencies = { "nvim-lua/plenary.nvim" },
     },
     {
-      "hrsh7th/nvim-cmp",
-      dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-buffer",
-        "L3MON4D3/LuaSnip",
+	"nvim-treesitter/nvim-treesitter",
+	build = ":TSUpdate" },
+    {
+	"L3MON4D3/LuaSnip",
+	dependencies = { "rafamadriz/friendly-snippets" },
+    },
+    {
+	"hrsh7th/nvim-cmp",
+	dependencies = {
+		"hrsh7th/cmp-nvim-lsp",
+		"hrsh7th/cmp-path",
+		"hrsh7th/cmp-buffer",
+		"L3MON4D3/LuaSnip",
       },
     },
     {
-      "windwp/nvim-autopairs",
-      config = function()
-        require("nvim-autopairs").setup {}
-      end,
+	"windwp/nvim-autopairs",
+	config = function()
+		require("nvim-autopairs").setup {}
+	end,
     },
     {
-      "nvim-tree/nvim-tree.lua",
-      dependencies = { "nvim-tree/nvim-web-devicons" },
-      config = function()
-        require("nvim-tree").setup({
-            sort_by = "case_sensitive",
-	    view = {
-		    width = 30,
-	    },
-	    renderer = {
-		    group_empty = true,
-	    },
-	    filters = {
-		    dotfiles = true,
-	    },
-        })
-      end,
+	"nvim-tree/nvim-tree.lua",
+	dependencies = { "nvim-tree/nvim-web-devicons" },
+	config = function()
+		require("nvim-tree").setup({
+            		sort_by = "case_sensitive",
+	    		view = { width = 30, },
+	    		renderer = { group_empty = true, },
+	    		filters = { dotfiles = true, },
+        	})
+      	end,
     },
   },
   checker = { enabled = true },
@@ -83,9 +89,19 @@ require("nvim-treesitter.configs").setup({
   highlight = { enable = true },
 })
 
-
 -- Mason: installs/updates LSP servers, linters, formatters
 require("mason").setup()
+
+require("mason-tool-installer").setup({
+  ensure_installed = {
+    "basedpyright",
+    "clangd",
+    "pylint",
+  },
+  auto_update = true,
+  run_on_start = true,
+  start_delay = 300,
+})
 
 -- Mason-LSPConfig: bridge between Mason and Neovim’s LSP
 require("mason-lspconfig").setup({
@@ -182,21 +198,20 @@ cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 -- Load LuaSnip snippets
 require("luasnip.loaders.from_vscode").lazy_load()
 
--- Neovim 0.11+ LSP style
 local caps = require("cmp_nvim_lsp").default_capabilities()
 
 vim.lsp.config('basedpyright', {
   capabilities = caps,
 })
-
 vim.lsp.enable('basedpyright')
 
--- clangd (needs utf-16 offsetEncoding)
+-- clangd needs utf-16 offsetEncoding
+local function has(bin) return vim.fn.executable(bin) == 1 end
 local clangd_caps = vim.tbl_deep_extend("force", {}, caps, { offsetEncoding = { "utf-16" } })
-vim.lsp.config('clangd', {
-  capabilities = clangd_caps,
-})
-vim.lsp.enable('clangd')
+if has('clangd') then
+  vim.lsp.config('clangd', { capabilities = clangd_caps })
+  vim.lsp.enable('clangd')
+end
 
 -- Set colorscheme
 vim.cmd("colorscheme kanagawa-dragon")
