@@ -9,7 +9,10 @@ vim.opt.relativenumber = true
 vim.opt.signcolumn = "number"
 vim.opt.clipboard = "unnamedplus"
 
-if vim.fn.has("android") == 1 or (vim.env.PREFIX or ""):match("com.termux") then
+local is_termux = (vim.fn.has("android") == 1)
+  or ((vim.env.PREFIX or ""):match("com.termux") ~= nil)
+
+if is_termux then
   vim.g.clipboard = {
     name = "termux-clipboard",
     copy = {["+"] = "termux-clipboard-set", ["*"] = "termux-clipboard-set"},
@@ -90,14 +93,16 @@ require("nvim-treesitter.configs").setup({
 })
 
 -- Mason: installs/updates LSP servers, linters, formatters
-require("mason").setup()
+require("mason").setup({
+	-- On Termux, append Mason’s bin so system binaries are preferred.
+	PATH = is_termux and "append" or "prepend",
+})
+
+local mti_tools = { "basedpyright", "pylint" }
+if not is_termux then table.insert(mti_tools, "clangd") end
 
 require("mason-tool-installer").setup({
-  ensure_installed = {
-    "basedpyright",
-    "clangd",
-    "pylint",
-  },
+  ensure_installed = mti_tools,
   auto_update = true,
   run_on_start = true,
   start_delay = 300,
@@ -105,8 +110,10 @@ require("mason-tool-installer").setup({
 
 -- Mason-LSPConfig: bridge between Mason and Neovim’s LSP
 require("mason-lspconfig").setup({
-  ensure_installed = { "basedpyright", "clangd" },
-  automatic_installation = true,
+  ensure_installed = is_termux
+    and { "basedpyright" }
+    or  { "basedpyright", "clangd" },
+  automatic_installation = is_termux and { exclude = { "clangd" } } or true,
 })
 
 -- Setup Null LS
@@ -206,9 +213,8 @@ vim.lsp.config('basedpyright', {
 vim.lsp.enable('basedpyright')
 
 -- clangd needs utf-16 offsetEncoding
-local function has(bin) return vim.fn.executable(bin) == 1 end
 local clangd_caps = vim.tbl_deep_extend("force", {}, caps, { offsetEncoding = { "utf-16" } })
-if has('clangd') then
+if vim.fn.executable('clangd') then
   vim.lsp.config('clangd', { capabilities = clangd_caps })
   vim.lsp.enable('clangd')
 end
@@ -222,11 +228,7 @@ vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = tru
 -- Use ripgrep for :grep / :vimgrep if available
 if vim.fn.executable("rg") == 1 then
   -- search recursively, smart-case, include dotfiles, follow symlinks
-  vim.opt.grepprg = "rg --vimgrep --smart-case --hidden --follow --no-heading --color=never"
-  vim.opt.grepformat = "%f:%l:%c:%m"
-end
-
-if vim.fn.executable("rg") == 1 then
   vim.opt.grepprg = "rg --vimgrep --smart-case --hidden --follow --no-heading --color=never --glob '!.git/'"
+  vim.opt.grepformat = "%f:%l:%c:%m"
 end
 
