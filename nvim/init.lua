@@ -232,3 +232,40 @@ if vim.fn.executable("rg") == 1 then
   vim.opt.grepformat = "%f:%l:%c:%m"
 end
 
+-- Better diagnostics UX: floating window
+vim.diagnostic.config({
+  virtual_text = false,        -- no inline noise; keep underline + float
+  signs = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    border = "rounded",
+    source = "if_many",        -- show source if multiple (pylint, lsp, etc.)
+    focusable = false,
+    header = "",
+    prefix = "",
+  },
+})
+
+-- Keymaps
+-- K (shift+k) is documentation hover
+-- gl is diagnostic hover
+local opts = { noremap = true, silent = true }
+vim.keymap.set("n", "gl", function()
+  vim.diagnostic.open_float(nil, { scope = "cursor" })
+end, opts)
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+
+-- Auto-show a small tooltip when paused on an error
+vim.o.updatetime = 250
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    -- scope="cursor" is precise; use "line" to show all issues on the line
+    vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+  end,
+})
+
+
+
