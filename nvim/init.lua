@@ -234,38 +234,56 @@ end
 
 -- Better diagnostics UX: floating window
 vim.diagnostic.config({
-  virtual_text = false,        -- no inline noise; keep underline + float
-  signs = true,
+  virtual_text = false,
+  signs = false,
   update_in_insert = false,
   severity_sort = true,
   float = {
     border = "rounded",
-    source = "if_many",        -- show source if multiple (pylint, lsp, etc.)
-    focusable = false,
-    header = "",
-    prefix = "",
-  },
+    source = "if_many",
+    focusable = true,
+    header = "Diagnostics",
+    prefix =function(diag, i, total)
+	local name = vim.diagnostic.severity[diag.severity]
+	return string.format("%s: ", name)
+    end,
+	},
 })
 
 -- Keymaps
 -- K (shift+k) is documentation hover
 -- gl is diagnostic hover
-local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "gl", function()
-  vim.diagnostic.open_float(nil, { scope = "cursor" })
-end, opts)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
 
--- Auto-show a small tooltip when paused on an error
-vim.o.updatetime = 250
-vim.api.nvim_create_autocmd("CursorHold", {
-  callback = function()
-    -- scope="cursor" is precise; use "line" to show all issues on the line
-    vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+vim.keymap.set("n", "gl", function()
+  vim.diagnostic.open_float(nil, {
+    scope = "cursor",
+    border = "rounded",
+    focusable = true,
+    close_events = { "InsertEnter" },
+    source = "if_many",
+  })
+end, { noremap = true, silent = true })
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  callback = function(args)
+    local cfg = vim.api.nvim_win_get_config(0)
+    if cfg and cfg.relative ~= "" then
+      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = args.buf, silent = true })
+    end
   end,
 })
 
-
+-- Auto-show a small tooltip when paused on an error 
+vim.o.updatetime = 600
+vim.api.nvim_create_autocmd("CursorHold", {
+	callback = function()
+		vim.diagnostic.open_float(nil, {
+			scope = "cursor",
+			border = "rounded",
+			focusable = true,
+			source = "if_many",
+			close_events = { "CursorMoved", "InsertEnter"},
+		})
+	end,
+})
 
