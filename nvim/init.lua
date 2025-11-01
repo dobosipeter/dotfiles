@@ -232,3 +232,58 @@ if vim.fn.executable("rg") == 1 then
   vim.opt.grepformat = "%f:%l:%c:%m"
 end
 
+-- Better diagnostics UX: floating window
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = false,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    border = "rounded",
+    source = "if_many",
+    focusable = true,
+    header = "Diagnostics",
+    prefix =function(diag, i, total)
+	local name = vim.diagnostic.severity[diag.severity]
+	return string.format("%s: ", name)
+    end,
+	},
+})
+
+-- Keymaps
+-- K (shift+k) is documentation hover
+-- gl is diagnostic hover
+
+vim.keymap.set("n", "gl", function()
+  vim.diagnostic.open_float(nil, {
+    scope = "cursor",
+    border = "rounded",
+    focusable = true,
+    close_events = { "InsertEnter" },
+    source = "if_many",
+  })
+end, { noremap = true, silent = true })
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  callback = function(args)
+    local cfg = vim.api.nvim_win_get_config(0)
+    if cfg and cfg.relative ~= "" then
+      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = args.buf, silent = true })
+    end
+  end,
+})
+
+-- Auto-show a small tooltip when paused on an error 
+vim.o.updatetime = 600
+vim.api.nvim_create_autocmd("CursorHold", {
+	callback = function()
+		vim.diagnostic.open_float(nil, {
+			scope = "cursor",
+			border = "rounded",
+			focusable = true,
+			source = "if_many",
+			close_events = { "CursorMoved", "InsertEnter"},
+		})
+	end,
+})
+
