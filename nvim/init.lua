@@ -83,6 +83,8 @@ require("lazy").setup({
         	})
       	end,
     },
+    {"lewis6991/gitsigns.nvim"}
+
   },
   checker = { enabled = true },
 })
@@ -90,6 +92,14 @@ require("lazy").setup({
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "lua", "vim", "vimdoc", "python", "cpp" },
   highlight = { enable = true },
+})
+
+require("gitsigns").setup({
+	signcolumn = false, -- Toggle with `:Gitsigns toggle_signs`
+	numhl = true, -- Toggle with `:Gitsigns toggle_numhl`
+	linehl = true, -- Toggle with `:Gitsigns toggle_linehl`
+	word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+	current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
 })
 
 -- Mason: installs/updates LSP servers, linters, formatters
