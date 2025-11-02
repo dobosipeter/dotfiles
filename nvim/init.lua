@@ -283,7 +283,7 @@ vim.diagnostic.config({
     source = "if_many",
     focusable = true,
     header = "Diagnostics",
-    prefix =function(diag, i, total)
+    prefix = function(diag, i, total)
 	local name = vim.diagnostic.severity[diag.severity]
 	return string.format("%s: ", name)
     end,
@@ -328,3 +328,17 @@ vim.api.nvim_create_autocmd("CursorHold", {
 	end,
 })
 
+-- Basic LSP shourtcuts
+-- gd goes to definition
+-- gr goes to references
+-- Leader r renames symbol
+-- Leader r shows code action menu (lsp suggestions, e.g.: import symbol, etc.)
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local opts = { buffer = args.buf }
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, opts)
+  end,
+})
