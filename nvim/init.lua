@@ -8,6 +8,8 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = "number"
 vim.opt.clipboard = "unnamedplus"
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
 local is_termux = (vim.fn.has("android") == 1)
   or ((vim.env.PREFIX or ""):match("com.termux") ~= nil)
@@ -83,7 +85,31 @@ require("lazy").setup({
         	})
       	end,
     },
-    {"lewis6991/gitsigns.nvim"}
+    {"lewis6991/gitsigns.nvim"},
+    {
+	    "CopilotC-Nvim/CopilotChat.nvim",
+	    dependencies = { { "nvim-lua/plenary.nvim", branch = "master" }, },
+	    build = "make tiktoken",
+	    opts = {
+		    model = "gpt-5",
+		    temperature = 0.45,
+		    window = {
+			    layout = "vertical",
+			    width = 0.4,
+			    border = "rounded",
+			    title = "Copilot Chat",
+			    position = 'right',
+		    },
+		    headers = {
+			    user = 'User',
+			    assistant = 'Model',
+			    tool = 'Tool',
+		    },
+		    separator = '-',
+		    auto_fold = false,
+		    auto_insert_mode = true,
+	    },
+    },
 
   },
   checker = { enabled = true },
