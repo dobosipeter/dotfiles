@@ -11,6 +11,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
+-- Termux specific configurations
 local is_termux = (vim.fn.has("android") == 1)
   or ((vim.env.PREFIX or ""):match("com.termux") ~= nil)
 
@@ -91,7 +92,7 @@ require("lazy").setup({
 	    dependencies = { { "nvim-lua/plenary.nvim", branch = "master" }, },
 	    build = "make tiktoken",
 	    opts = {
-		    model = "gpt-5",
+		    model = "claude-sonnet-4.5",
 		    temperature = 0.45,
 		    window = {
 			    layout = "vertical",
@@ -107,7 +108,7 @@ require("lazy").setup({
 		    },
 		    separator = '-',
 		    auto_fold = false,
-		    auto_insert_mode = true,
+		    auto_insert_mode = false,
 	    },
     },
 
@@ -261,6 +262,9 @@ vim.cmd("colorscheme kanagawa-dragon")
 -- Set nvim-tree keymap
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
+-- Set CopilotChat keymap
+vim.api.nvim_set_keymap("n", "<leader>c", ":CopilotChatToggle<CR>", { noremap = true, silent = true })
+
 -- Use ripgrep for :grep / :vimgrep if available
 if vim.fn.executable("rg") == 1 then
   -- search recursively, smart-case, include dotfiles, follow symlinks
@@ -300,6 +304,7 @@ vim.keymap.set("n", "gl", function()
   })
 end, { noremap = true, silent = true })
 
+-- Map q to quit the hover float, when focused
 vim.api.nvim_create_autocmd("BufWinEnter", {
   callback = function(args)
     local cfg = vim.api.nvim_win_get_config(0)
