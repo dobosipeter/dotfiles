@@ -89,7 +89,10 @@ require("lazy").setup({
     {"lewis6991/gitsigns.nvim"},
     {
 	    "CopilotC-Nvim/CopilotChat.nvim",
-	    dependencies = { { "nvim-lua/plenary.nvim", branch = "master" }, },
+	    dependencies = { 
+		    { "nvim-lua/plenary.nvim", branch = "master" },
+		    -- { "MeanderingProgrammer/render-markdown.nvim" },
+	    },
 	    build = "make tiktoken",
 	    opts = {
 		    model = "claude-sonnet-4.5",
@@ -102,14 +105,25 @@ require("lazy").setup({
 			    position = 'right',
 		    },
 		    headers = {
-			    user = 'User',
-			    assistant = 'Model',
+			    user = '- User',
+			    assistant = '- Model',
 			    tool = 'Tool',
 		    },
 		    separator = '-',
 		    auto_fold = false,
 		    auto_insert_mode = false,
 	    },
+    },
+    {
+	    "MeanderingProgrammer/render-markdown.nvim",
+	    opts = {
+		    file_types = { "markdown", "copilot-chat" },
+		    sign = { enabled = false },
+		    heading = {
+			    sign = false,
+		    },
+	    },
+	    ft = { "markdown", "copilot-chat" },
     },
 
   },
