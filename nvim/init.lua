@@ -364,5 +364,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, opts)
+    -- Explicit docs hover (fixes behavior in auto-session sessions)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
   end,
 })

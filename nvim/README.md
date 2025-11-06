@@ -4,7 +4,8 @@ Use a recent nvim version (I'm running v0.11.4).
 
 Further ideas I would like to explore, configure, learn:  
 * telescope
-* auto-session 
+* ~~auto-session~~ 
+    * ~~track down the weird bug with documentation hover not working in auto-session loaded sessions~~
 * which-key.nvim 
 * venv-selector 
 * enable/implement simple linting fixes (potentially with copilot?) 
@@ -12,4 +13,5 @@ Further ideas I would like to explore, configure, learn:
 * duplicate current view into new tab
 * highlight all instances of symbol under cursor
 * folding methods
+* configure pylint to use the correct/current venv
 
