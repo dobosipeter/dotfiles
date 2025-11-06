@@ -10,6 +10,7 @@ vim.opt.signcolumn = "number"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- Termux specific configurations
 local is_termux = (vim.fn.has("android") == 1)
@@ -87,6 +88,15 @@ require("lazy").setup({
       	end,
     },
     {"lewis6991/gitsigns.nvim"},
+    {
+      "rmagatti/auto-session",
+      opts = {
+        log_level = "error",
+        suppressed_dirs = { "~/", "~/Downloads", "/" },
+        git_use_branch_name = true,
+        bypass_save_file_types = { "alpha", "dashboard" },
+      },
+    },
     {
 	    "CopilotC-Nvim/CopilotChat.nvim",
 	    dependencies = { 

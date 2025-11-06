@@ -111,5 +111,6 @@ if [ -f "$HOME/.zshrc.local" ]; then
 fi
 export PATH="$PATH:/home/dop3bp/.local/bin"
 # alias powershell="pwsh"
+alias apva="docker start 3fff && docker exec -it 3fff zsh"
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
