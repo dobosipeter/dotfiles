@@ -125,40 +125,6 @@ require("lazy").setup({
 	    },
     },
     {
-  "kevinhwang91/nvim-ufo",
-  dependencies = { "kevinhwang91/promise-async" },
-  event = "VeryLazy",
-  config = function()
-    vim.o.foldcolumn = "0"
-    vim.o.foldlevel = 99
-    vim.o.foldlevelstart = 99
-    vim.o.foldenable = true
-
-    -- Optional: nice fold icons
-    vim.opt.fillchars:append({
-      fold = " ",
-      foldopen = "",
-      foldclose = "",
-      foldsep = " ",
-    })
-
-    require("ufo").setup({
-      provider_selector = function(bufnr, filetype, buftype)
-	if filetype == "python" then
-		return { "treesitter", "indent" }
-	end
-        return { "lsp", "indent" }
-      end,
-    })
-
-    vim.keymap.set("n", "zR", require("ufo").openAllFolds,
-      { desc = "UFO: open all folds" })
-    vim.keymap.set("n", "zM", require("ufo").closeAllFolds,
-      { desc = "UFO: close all folds" })
-  end,
-},
-
-    {
 	    "MeanderingProgrammer/render-markdown.nvim",
 	    opts = {
 		    file_types = { "markdown", "copilot-chat" },
@@ -301,12 +267,6 @@ cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 require("luasnip.loaders.from_vscode").lazy_load()
 
 local caps = require("cmp_nvim_lsp").default_capabilities()
-
--- Tell LSP servers we support folding ranges (needed for ufo’s LSP provider)
-caps.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
-}
 
 vim.lsp.config('basedpyright', {
   capabilities = caps,
