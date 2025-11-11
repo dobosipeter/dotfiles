@@ -105,7 +105,7 @@ require("lazy").setup({
 	    },
 	    build = "make tiktoken",
 	    opts = {
-		    model = "claude-sonnet-4.5",
+		    model = "gpt-5",
 		    temperature = 0.45,
 		    window = {
 			    layout = "vertical",
@@ -144,6 +144,12 @@ require("nvim-treesitter.configs").setup({
   ensure_installed = { "lua", "vim", "vimdoc", "python", "cpp" },
   highlight = { enable = true },
 })
+
+vim.opt.foldmethod = "indent"
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldcolumn = "0"
 
 require("gitsigns").setup({
 	signcolumn = false, -- Toggle with `:Gitsigns toggle_signs`
