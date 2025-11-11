@@ -88,15 +88,23 @@ require("lazy").setup({
       	end,
     },
     {"lewis6991/gitsigns.nvim"},
-    {
-      "rmagatti/auto-session",
-      opts = {
-        log_level = "error",
-        suppressed_dirs = { "~/", "~/Downloads", "/" },
-        git_use_branch_name = true,
-        bypass_save_file_types = { "alpha", "dashboard" },
-      },
+{
+  "rmagatti/auto-session",
+  opts = {
+    pre_save_cmds = { "silent! mkview" },
+    post_restore_cmds = {
+      "silent! loadview",
+      function()
+        vim.opt.foldmethod = "indent"
+        vim.opt.foldlevel = 99
+        vim.opt.foldlevelstart = 99
+        vim.defer_fn(function()
+          pcall(vim.cmd, "silent! tabdo windo normal! zx")
+        end, 120)
+      end,
     },
+  },
+},
     {
 	    "CopilotC-Nvim/CopilotChat.nvim",
 	    dependencies = { 
@@ -134,6 +142,9 @@ require("lazy").setup({
 		    },
 	    },
 	    ft = { "markdown", "copilot-chat" },
+    },
+    {
+	    "saghen/blink.indent",
     },
 
   },
