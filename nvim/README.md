@@ -6,6 +6,7 @@ Further ideas I would like to explore, configure, learn:
 * telescope
 * ~auto-session~ 
     * ~track down the weird bug with documentation hover not working in auto-session loaded sessions~
+    * ~Causing issues and isn't working well in general, disabled switched to using the built in session management with some helpers.~
 * which-key.nvim 
 * venv-selector 
 * enable/implement simple linting fixes (potentially with copilot?) 
@@ -14,6 +15,8 @@ Further ideas I would like to explore, configure, learn:
 * highlight all instances of symbol under cursor
 ~* folding methods~
 * configure pylint to use the correct/current venv
+* configured better lua, markdown support
+* add support for latex
 
 ## Structure  
   
@@ -78,3 +81,8 @@ Further ideas I would like to explore, configure, learn:
 * :tabnew | term
 * Exit term insert mode: Ctrl-\ Ctrl-n
 * :q or Ctrl-d to close the shell when it ends
+  
+### Session management  
+  
+:SessionSave
+:SessionList

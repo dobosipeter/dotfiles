@@ -5,7 +5,7 @@ return {
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "lua", "vim", "vimdoc", "python", "cpp" },
+        ensure_installed = { "lua", "vim", "vimdoc", "python", "cpp", "markdown", "markdown_inline" },
         highlight = { enable = true },
       })
     end,
@@ -23,25 +23,6 @@ return {
         current_line_blame = true,
       })
     end,
-  },
-
-  -- Auto Session
-  {
-    "rmagatti/auto-session",
-    opts = {
-      pre_save_cmds = { "silent! mkview" },
-      post_restore_cmds = {
-        "silent! loadview",
-        function()
-          vim.opt.foldmethod = "indent"
-          vim.opt.foldlevel = 99
-          vim.opt.foldlevelstart = 99
-          vim.defer_fn(function()
-            pcall(vim.cmd, "silent! tabdo windo normal! zx")
-          end, 120)
-        end,
-      },
-    },
   },
 
   -- CopilotChat
