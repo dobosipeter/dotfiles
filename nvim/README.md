@@ -86,3 +86,9 @@ Further ideas I would like to explore, configure, learn:
   
 :SessionSave
 :SessionList
+  
+### LaTeX  
+  
+* \-ll to start&stop continous compilation (recompiles on write)
+* \-lv Forward search of text from source in the PDF
+* \-lc Clean up auxiliary files

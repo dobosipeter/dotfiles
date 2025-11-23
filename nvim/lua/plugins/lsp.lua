@@ -49,6 +49,13 @@ return {
       })
       vim.lsp.enable('lua_ls')
 
+      -- Setup texlab
+      vim.lsp.config('texlab', {
+        capabilities = caps,
+        on_attach = on_attach,
+      })
+      vim.lsp.enable('texlab')
+
       -- Setup clangd
       local clangd_caps = vim.tbl_deep_extend("force", {}, caps, { offsetEncoding = { "utf-16" } })
       if not utils.is_termux and vim.fn.executable('clangd') then
@@ -79,8 +86,8 @@ return {
       local utils = require('utils')
       require("mason-lspconfig").setup({
         ensure_installed = utils.is_termux
-          and { "basedpyright", "lua_ls" }
-          or { "basedpyright", "clangd", "lua_ls" },
+          and { "basedpyright", "lua_ls", "texlab" }
+          or { "basedpyright", "clangd", "lua_ls", "texlab" },
         automatic_installation = utils.is_termux and { exclude = { "clangd" } } or true,
       })
     end,
@@ -91,7 +98,7 @@ return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     config = function()
       local utils = require('utils')
-      local mti_tools = { "basedpyright", "pylint", "lua_ls" }
+      local mti_tools = { "basedpyright", "pylint", "lua_ls", "texlab" }
       if not utils.is_termux then table.insert(mti_tools, "clangd") end
 
       require("mason-tool-installer").setup({
