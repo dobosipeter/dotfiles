@@ -15,6 +15,11 @@ return {
   {
     "lervag/vimtex",
     lazy = false,
+    -- Disable in devcontainers
+    enabled = function()
+      local utils = require('utils')
+      return not utils.is_devcontainer
+    end,
     init = function()
 	vim.g.vimtex_view_method = 'zathura'
     end

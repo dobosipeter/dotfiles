@@ -49,13 +49,14 @@ return {
       })
       vim.lsp.enable('lua_ls')
 
-      -- Setup texlab
-      vim.lsp.config('texlab', {
-        capabilities = caps,
-        on_attach = on_attach,
-      })
-      vim.lsp.enable('texlab')
-
+      -- Setup texlab, but not in devcontainers
+      if not utils.is_devcontainer then
+        vim.lsp.config('texlab', {
+          capabilities = caps,
+          on_attach = on_attach,
+        })
+        vim.lsp.enable('texlab')
+      end
       -- Setup clangd
       local clangd_caps = vim.tbl_deep_extend("force", {}, caps, { offsetEncoding = { "utf-16" } })
       if not utils.is_termux and vim.fn.executable('clangd') then
@@ -84,10 +85,20 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       local utils = require('utils')
+
+      -- Define base tools
+      local tools = { "basedpyright", "lua_ls" }
+
+      -- Add environment-specific tools
+      if not utils.is_termux then
+        table.insert(tools, "clangd")
+      end
+      if not utils.is_devcontainer then
+        table.insert(tools, "texlab")
+      end
+
       require("mason-lspconfig").setup({
-        ensure_installed = utils.is_termux
-          and { "basedpyright", "lua_ls", "texlab" }
-          or { "basedpyright", "clangd", "lua_ls", "texlab" },
+        ensure_installed = tools,
         automatic_installation = utils.is_termux and { exclude = { "clangd" } } or true,
       })
     end,
@@ -98,8 +109,17 @@ return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     config = function()
       local utils = require('utils')
-      local mti_tools = { "basedpyright", "pylint", "lua_ls", "texlab" }
-      if not utils.is_termux then table.insert(mti_tools, "clangd") end
+
+      -- Define base tools
+      local mti_tools = { "basedpyright", "pylint", "lua_ls" }
+
+      -- Add environment-specific tools
+      if not utils.is_termux then
+        table.insert(mti_tools, "clangd")
+      end
+      if not utils.is_devcontainer then
+        table.insert(mti_tools, "texlab")
+      end
 
       require("mason-tool-installer").setup({
         ensure_installed = mti_tools,
