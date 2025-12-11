@@ -136,9 +136,21 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local null_ls = require("null-ls")
+
+      -- Helper to find the pylint executable in common venv locations
+      local function get_pylint_command()
+	      local local_pylint = vim.fn.getcwd() .. "/.venv/bin/pylint"
+	      if vim.fn.filereadable(local_pylint) == 1 then
+		      return local_pylint
+	      end
+	      return "pylint"
+      end
+
       null_ls.setup({
         sources = {
-          null_ls.builtins.diagnostics.pylint,
+          null_ls.builtins.diagnostics.pylint.with({
+		  command = get_pylint_command
+	  }),
         },
       })
     end,
