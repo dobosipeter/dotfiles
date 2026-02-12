@@ -111,6 +111,16 @@ if [ -f "$HOME/.zshrc.local" ]; then
 fi
 export PATH="$PATH:/home/dop3bp/.local/bin"
 # alias powershell="pwsh"
-alias apva="docker start 3fff && docker exec -it 3fff zsh"
+#alias apva="ssh LaVM"
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Only run `brew shellenv` if brew is available; prefer $PATH resolution but fall back to common linuxbrew location
+BREW_PATH=""
+if command -v brew >/dev/null 2>&1; then
+  BREW_PATH="$(command -v brew)"
+elif [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  BREW_PATH="/home/linuxbrew/.linuxbrew/bin/brew"
+fi
+
+if [ -n "$BREW_PATH" ]; then
+  eval "$("$BREW_PATH" shellenv)"
+fi
