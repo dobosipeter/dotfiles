@@ -126,6 +126,10 @@ fi
 export PATH="$PATH:/home/dop3bp/.local/bin"
 # alias powershell="pwsh"
 #alias apva="ssh LaVM"
+# Add nvim appimage bin to PATH if it exists
+if [ -d "/opt/nvim-linux-x86_64/bin" ]; then
+  export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+fi
 
 # Only run `brew shellenv` if brew is available; prefer $PATH resolution but fall back to common linuxbrew location
 BREW_PATH=""
