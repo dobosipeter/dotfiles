@@ -77,6 +77,15 @@ return {
       require("mason").setup({
         PATH = utils.is_termux and "append" or "prepend",
       })
+      
+      -- Warn about missing system dependencies
+      if not utils.has_pip() then
+        vim.notify(
+          "Warning: pip not found. Python-based tools (basedpyright, pylint) will fail to install.\n" ..
+          "Install with: sudo apt install python3-pip python3-venv",
+          vim.log.levels.WARN
+        )
+      end
     end,
   },
 
