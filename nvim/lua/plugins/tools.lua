@@ -2,20 +2,17 @@ return {
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
     config = function()
-      -- nvim-treesitter recently renamed `configs.lua` -> `config.lua` in some releases.
-      -- Try the new module name first, then fall back to the old one for compatibility.
-      local ok, ts = pcall(require, "nvim-treesitter.config")
-      if not ok then
-        ok, ts = pcall(require, "nvim-treesitter.configs")
-      end
-      if ok and ts and ts.setup then
-        ts.setup({
-          ensure_installed = { "lua", "vim", "vimdoc", "python", "cpp", "markdown", "markdown_inline" },
-          highlight = { enable = true },
-        })
-      end
+      require("nvim-treesitter").setup({})
+      require("nvim-treesitter").install({
+        "lua", "vim", "vimdoc", "python", "cpp", "markdown", "markdown_inline", "bash",
+      })
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function() pcall(vim.treesitter.start) end,
+      })
     end,
   },
 
