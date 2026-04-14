@@ -114,6 +114,8 @@ return {
   },
 
   -- Navic (LSP breadcrumb context for statusline)
+  -- NOTE: navic can only attach to one LSP server per buffer. If multiple servers
+  -- support documentSymbol, use the lsp.preference option to rank them.
   {
     "SmiteshP/nvim-navic",
     opts = { highlight = false },
@@ -135,12 +137,9 @@ return {
           lualine_b = { "branch" },
           lualine_c = {
             "filename",
-            {
-              function() return require("nvim-navic").get_location() end,
-              cond = function() return require("nvim-navic").is_available() end,
-            },
+            { "navic" },
           },
-          lualine_x = {},
+          lualine_x = { "searchcount" },
           lualine_y = { "location" },
           lualine_z = { "progress" },
         },
