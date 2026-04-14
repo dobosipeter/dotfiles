@@ -16,6 +16,9 @@ opt.splitright = true
 opt.splitbelow = true
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
+-- Command line
+opt.cmdheight = 0
+
 -- Folding
 opt.foldmethod = "indent"
 opt.foldenable = true

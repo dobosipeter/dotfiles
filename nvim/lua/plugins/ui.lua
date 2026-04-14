@@ -113,6 +113,41 @@ return {
     }
   },
 
+  -- Navic (LSP breadcrumb context for statusline)
+  {
+    "SmiteshP/nvim-navic",
+    opts = { highlight = false },
+  },
+
+  -- Lualine
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "gruvbox-material",
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = { "branch" },
+          lualine_c = {
+            "filename",
+            {
+              function() return require("nvim-navic").get_location() end,
+              cond = function() return require("nvim-navic").is_available() end,
+            },
+          },
+          lualine_x = {},
+          lualine_y = { "location" },
+          lualine_z = { "progress" },
+        },
+      })
+    end,
+  },
+
   -- Indent Blankline
   {
     "saghen/blink.indent",

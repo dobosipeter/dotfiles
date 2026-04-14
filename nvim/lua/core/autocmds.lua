@@ -1,3 +1,28 @@
+-- Highlight all occurrences of the symbol under the cursor (LSP document highlight)
+vim.o.updatetime = 200
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client:supports_method("textDocument/documentHighlight") then
+      local group = vim.api.nvim_create_augroup("lsp_document_highlight_" .. args.buf, { clear = true })
+      vim.api.nvim_create_autocmd("CursorHold", {
+        group = group,
+        buffer = args.buf,
+        callback = vim.lsp.buf.document_highlight,
+      })
+      vim.api.nvim_create_autocmd("CursorMoved", {
+        group = group,
+        buffer = args.buf,
+        callback = vim.lsp.buf.clear_references,
+      })
+    end
+    if client and client:supports_method("textDocument/documentSymbol") then
+      local ok, navic = pcall(require, "nvim-navic")
+      if ok then navic.attach(client, args.buf) end
+    end
+  end,
+})
+
 -- Map q to quit the hover float, when focused
 vim.api.nvim_create_autocmd("BufWinEnter", {
   callback = function(args)
