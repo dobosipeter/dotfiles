@@ -147,6 +147,33 @@ return {
     end,
   },
 
+  -- Satellite (decorated scrollbar)
+  {
+    "lewis6991/satellite.nvim",
+    config = function()
+      require("satellite").setup({
+        current_only = false,
+        winblend = 50,
+        handlers = {
+          cursor = {
+            enable = true,
+            symbols = { "●" },
+          },
+          search = { enable = true },
+          diagnostic = {
+            enable = true,
+            signs = { "•", "•", "•" },
+          },
+          gitsigns = {
+            enable = true,
+            signs = { add = "•", change = "•", delete = "•" },
+          },
+        },
+      })
+      vim.api.nvim_set_hl(0, "SatelliteCursor", { fg = "#7c6f64" })
+    end,
+  },
+
   -- Indent Blankline
   {
     "saghen/blink.indent",
