@@ -96,10 +96,11 @@ return {
       local utils = require('utils')
 
       -- Define base tools
-      local tools = { "basedpyright" }
+      local tools = {}
 
       -- Add environment-specific tools
       if not utils.is_termux then
+        table.insert(tools, "basedpyright")
         table.insert(tools, "lua_ls")
         table.insert(tools, "clangd")
       end
@@ -109,7 +110,7 @@ return {
 
       require("mason-lspconfig").setup({
         ensure_installed = tools,
-        automatic_installation = utils.is_termux and { exclude = { "clangd", "lua_ls" } } or true,
+        automatic_installation = utils.is_termux and { exclude = { "clangd", "lua_ls", "basedpyright" } } or true,
       })
     end,
   },
@@ -121,10 +122,11 @@ return {
       local utils = require('utils')
 
       -- Define base tools
-      local mti_tools = { "basedpyright", "pylint" }
+      local mti_tools = { "pylint" }
 
       -- Add environment-specific tools
       if not utils.is_termux then
+        table.insert(mti_tools, "basedpyright")
         table.insert(mti_tools, "lua_ls")
         table.insert(mti_tools, "clangd")
       end
