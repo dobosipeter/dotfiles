@@ -44,6 +44,15 @@ return {
     end,
   },
 
+  -- Spellwarn (renders spell errors as diagnostics)
+  {
+    "ravibrock/spellwarn.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("spellwarn").setup()
+    end,
+  },
+
   -- CopilotChat
   {
     "CopilotC-Nvim/CopilotChat.nvim",

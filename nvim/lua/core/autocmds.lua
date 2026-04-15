@@ -33,6 +33,15 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   end,
 })
 
+-- Enable spell checking for prose filetypes
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "tex", "text", "gitcommit" },
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = { "en" }
+  end,
+})
+
 -- Auto-show a small tooltip when paused on an error (uncomment to reenable)
 -- vim.o.updatetime = 600
 -- vim.api.nvim_create_autocmd("CursorHold", {

@@ -66,6 +66,13 @@ return {
         })
         vim.lsp.enable('clangd')
       end
+
+      -- Setup typos-lsp (source code spell checker)
+      vim.lsp.config('typos_lsp', {
+        capabilities = caps,
+        on_attach = on_attach,
+      })
+      vim.lsp.enable('typos_lsp')
     end,
   },
 
@@ -96,7 +103,7 @@ return {
       local utils = require('utils')
 
       -- Define base tools
-      local tools = {}
+      local tools = { "typos_lsp" }
 
       -- Add environment-specific tools
       if not utils.is_termux then
@@ -122,7 +129,7 @@ return {
       local utils = require('utils')
 
       -- Define base tools
-      local mti_tools = { "pylint" }
+      local mti_tools = { "pylint", "typos-lsp" }
 
       -- Add environment-specific tools
       if not utils.is_termux then
