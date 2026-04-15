@@ -33,7 +33,7 @@ Key files & locations (start here)
 - [nvim/lua/core/options.lua](nvim/lua/core/options.lua): vim options and diagnostic config (folding, clipboard, ripgrep integration).
 - [nvim/lua/core/keymaps.lua](nvim/lua/core/keymaps.lua) and [nvim/lua/core/autocmds.lua](nvim/lua/core/autocmds.lua): keybindings and small UI behaviors (LSP highlight, navic, spell for prose filetypes).
 - [nvim/lua/plugins/init.lua](nvim/lua/plugins/init.lua): bootstraps `lazy.nvim` and lists plugin specs.
-- [nvim/lua/plugins/*.lua](nvim/lua/plugins): per-plugin configuration — `lsp.lua`, `colorscheme.lua`, `completion.lua`, `formatting.lua`, `tools.lua`, `ui.lua`.
+- [nvim/lua/plugins/*.lua](nvim/lua/plugins): per-plugin configuration — `lsp.lua`, `colorscheme.lua`, `completion.lua`, `formatting.lua`, `telescope.lua`, `harpoon.lua`, `tools.lua`, `ui.lua`.
 - [nvim/lua/utils.lua](nvim/lua/utils.lua): environment flags (`is_termux`, `is_devcontainer`) and helpers (`has_pip()`).
 - [nvim/rice/](nvim/rice): ASCII headers and quotes used by the alpha-nvim dashboard.
 - [kitty/kitty.conf](kitty/kitty.conf): Kitty terminal settings (font, opacity, colors).
@@ -45,15 +45,14 @@ Project-specific patterns & conventions
 - Lua modules use the `require('<module>')` pattern with root set to `nvim/lua`. E.g. `require('core.options')` loads `nvim/lua/core/options.lua`.
 - Plugins are declared as Lua tables and returned from `nvim/lua/plugins/*.lua` files; these are consumed by `require('lazy').setup()`.
 - Environment flags in `utils.lua` (`is_termux`, `is_devcontainer`, `has_pip()`) conditionally enable plugins, LSP servers, and Mason behavior.
-- Leader key is `\` (backslash, Neovim default — not explicitly set). Key mappings:
-  - `<leader>e` nvim-tree toggle, `<leader>c` CopilotChat toggle
-  - `<leader>r` rename, `<leader>a` code action (LSP on_attach)
-  - `gd` go to definition, `gr` references, `K` hover, `gl` diagnostic float
+- Leader key is `\` (backslash, Neovim default — not explicitly set).
+- All keybindings are documented in [nvim/KEYBINDINGS.md](nvim/KEYBINDINGS.md).
 
 Integration points (externals to be aware of)
 - lazy.nvim — plugin manager bootstrapped in `nvim/lua/plugins/init.lua` (cloned to `stdpath('data')/lazy/lazy.nvim`).
 - Mason, mason-lspconfig, mason-tool-installer, none-ls: used for LSP/formatters/linters in `nvim/lua/plugins/lsp.lua`.
 - LSP servers: `basedpyright`, `lua_ls`, `clangd`, `texlab`, `typos_lsp` (conditional on environment).
+- Telescope (fuzzy finder) and Harpoon 2 (file bookmarks/navigation).
 - Treesitter (`nvim-treesitter`), nvim-cmp + LuaSnip (completion), nvim-autopairs.
 - conform.nvim for autoformatting on save (`black` for Python, `prettier` for Markdown).
 - UI: alpha-nvim (dashboard), nvim-tree (file explorer), lualine (statusline), satellite (scrollbar), blink.indent, render-markdown, nvim-navic (breadcrumbs).

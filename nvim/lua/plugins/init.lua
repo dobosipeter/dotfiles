@@ -21,6 +21,8 @@ require("lazy").setup({
     require("plugins.completion"),
     require("plugins.tools"),
     require("plugins.formatting"),
+    require("plugins.telescope"),
+    require("plugins.harpoon"),
   },
   checker = { enabled = true },
 })
