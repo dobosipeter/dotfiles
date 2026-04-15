@@ -2,6 +2,44 @@
 
 Leader key is `\` (backslash, Neovim default).
 
+## Navigation (built-in)
+
+### Windows
+
+| Key              | Action                          |
+|------------------|---------------------------------|
+| `Ctrl-w s`       | Split window horizontally       |
+| `Ctrl-w v`       | Split window vertically         |
+| `Ctrl-w h/j/k/l` | Move to left/down/up/right window |
+| `Ctrl-w w`       | Cycle to next window            |
+| `Ctrl-w q`       | Close current window            |
+| `Ctrl-w o`       | Close all other windows         |
+| `Ctrl-w =`       | Equalize window sizes           |
+| `Ctrl-w +/-`     | Increase/decrease height        |
+| `Ctrl-w >/<`     | Increase/decrease width         |
+| `Ctrl-w T`       | Move window to new tab          |
+
+### Buffers
+
+| Key          | Action                    |
+|--------------|---------------------------|
+| `:e <file>`  | Open file in current buffer |
+| `:bnext` / `:bn` | Next buffer            |
+| `:bprev` / `:bp` | Previous buffer        |
+| `:ls`        | List open buffers         |
+| `:b <name/num>` | Switch to buffer by name or number |
+| `:bd`        | Close current buffer      |
+
+### Tabs
+
+| Key              | Action                  |
+|------------------|-------------------------|
+| `:tabnew <file>` | Open file in new tab    |
+| `gt`             | Next tab                |
+| `gT`             | Previous tab            |
+| `:tabclose`      | Close current tab       |
+| `:tabonly`        | Close all other tabs    |
+
 ## Diagnostics
 
 | Key  | Action                  | Source          |
@@ -53,7 +91,7 @@ Leader key is `\` (backslash, Neovim default).
 
 | Key         | Action         | Source             |
 |-------------|----------------|--------------------|
-| `<leader>f` | Format buffer  | plugins/formatting |
+| `<leader>bf` | Format buffer  | plugins/formatting |
 
 Format on save is also enabled (black for Python, prettier for Markdown).
 
