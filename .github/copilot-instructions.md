@@ -33,7 +33,7 @@ Key files & locations (start here)
 - [nvim/lua/core/options.lua](nvim/lua/core/options.lua): vim options and diagnostic config (folding, clipboard, ripgrep integration).
 - [nvim/lua/core/keymaps.lua](nvim/lua/core/keymaps.lua) and [nvim/lua/core/autocmds.lua](nvim/lua/core/autocmds.lua): keybindings and small UI behaviors (LSP highlight, navic, spell for prose filetypes).
 - [nvim/lua/plugins/init.lua](nvim/lua/plugins/init.lua): bootstraps `lazy.nvim` and lists plugin specs.
-- [nvim/lua/plugins/*.lua](nvim/lua/plugins): per-plugin configuration — `lsp.lua`, `colorscheme.lua`, `completion.lua`, `tools.lua`, `ui.lua`.
+- [nvim/lua/plugins/*.lua](nvim/lua/plugins): per-plugin configuration — `lsp.lua`, `colorscheme.lua`, `completion.lua`, `formatting.lua`, `tools.lua`, `ui.lua`.
 - [nvim/lua/utils.lua](nvim/lua/utils.lua): environment flags (`is_termux`, `is_devcontainer`) and helpers (`has_pip()`).
 - [nvim/rice/](nvim/rice): ASCII headers and quotes used by the alpha-nvim dashboard.
 - [kitty/kitty.conf](kitty/kitty.conf): Kitty terminal settings (font, opacity, colors).
@@ -55,6 +55,7 @@ Integration points (externals to be aware of)
 - Mason, mason-lspconfig, mason-tool-installer, none-ls: used for LSP/formatters/linters in `nvim/lua/plugins/lsp.lua`.
 - LSP servers: `basedpyright`, `lua_ls`, `clangd`, `texlab`, `typos_lsp` (conditional on environment).
 - Treesitter (`nvim-treesitter`), nvim-cmp + LuaSnip (completion), nvim-autopairs.
+- conform.nvim for autoformatting on save (`black` for Python, `prettier` for Markdown).
 - UI: alpha-nvim (dashboard), nvim-tree (file explorer), lualine (statusline), satellite (scrollbar), blink.indent, render-markdown, nvim-navic (breadcrumbs).
 - Git: gitsigns.nvim. Spell: spellwarn.nvim.
 - CopilotChat (model: claude-sonnet-4.5) for AI chat inside Neovim.

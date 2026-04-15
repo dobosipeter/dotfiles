@@ -20,6 +20,7 @@ require("lazy").setup({
     require("plugins.lsp"),
     require("plugins.completion"),
     require("plugins.tools"),
+    require("plugins.formatting"),
   },
   checker = { enabled = true },
 })

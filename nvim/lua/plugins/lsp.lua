@@ -129,7 +129,7 @@ return {
       local utils = require('utils')
 
       -- Define base tools
-      local mti_tools = { "pylint", "typos-lsp" }
+      local mti_tools = { "pylint", "typos-lsp", "black", "prettier" }
 
       -- Add environment-specific tools
       if not utils.is_termux then
