@@ -73,6 +73,7 @@ Leader key is `\` (backslash, Neovim default).
 | Key          | Action           | Source          |
 |--------------|------------------|-----------------|
 | `<leader>ha` | Add file         | plugins/harpoon |
+| `<leader>hr` | Remove file      | plugins/harpoon |
 | `<leader>hh` | Toggle menu      | plugins/harpoon |
 | `<leader>1`  | Jump to file 1   | plugins/harpoon |
 | `<leader>2`  | Jump to file 2   | plugins/harpoon |
