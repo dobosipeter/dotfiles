@@ -118,6 +118,28 @@ Leader key is `\` (backslash, Neovim default).
 
 Format on save is also enabled (black for Python, prettier for Markdown).
 
+## Git (Gitsigns + Diffview)
+
+Gitsigns keymaps are buffer-local and only active in tracked files.
+
+| Key          | Action                                  | Source        |
+| ------------ | --------------------------------------- | ------------- |
+| `<leader>gp` | Preview hunk under cursor               | plugins/tools |
+| `<leader>gd` | Diff buffer against index               | plugins/tools |
+| `<leader>gD` | Diff buffer against last commit (`~`)   | plugins/tools |
+| `<leader>gb` | Blame current line (full popup)         | plugins/tools |
+| `<leader>gs` | Stage hunk under cursor                 | plugins/tools |
+| `<leader>gr` | Reset hunk under cursor                 | plugins/tools |
+| `]c`         | Next hunk                               | plugins/tools |
+| `[c`         | Previous hunk                           | plugins/tools |
+| `<leader>gv` | Diffview: open diff of working tree     | plugins/tools |
+| `<leader>gV` | Diffview: close                         | plugins/tools |
+| `<leader>gh` | Diffview: branch file history           | plugins/tools |
+| `<leader>gH` | Diffview: current file history          | plugins/tools |
+
+Useful Diffview commands: `:DiffviewOpen <rev>`, `:DiffviewOpen HEAD~3..HEAD`,
+`:DiffviewOpen origin/main...HEAD` to review a branch/PR.
+
 ## Copilot Chat
 
 | Key         | Action      | Source        |

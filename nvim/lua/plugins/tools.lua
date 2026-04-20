@@ -34,14 +34,57 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     config = function()
-      require("gitsigns").setup({
+      local gs = require("gitsigns")
+      gs.setup({
         signcolumn = false,
         numhl = true,
         linehl = true,
         word_diff = false,
         current_line_blame = true,
+        on_attach = function(bufnr)
+          local map = function(mode, lhs, rhs, desc)
+            vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
+          end
+
+          map("n", "<leader>gp", gs.preview_hunk, "Gitsigns: preview hunk")
+          map("n", "<leader>gd", gs.diffthis, "Gitsigns: diff against index")
+          map("n", "<leader>gD", function() gs.diffthis("~") end, "Gitsigns: diff against last commit")
+          map("n", "<leader>gb", function() gs.blame_line({ full = true }) end, "Gitsigns: blame line")
+          map("n", "<leader>gs", gs.stage_hunk, "Gitsigns: stage hunk")
+          map("n", "<leader>gr", gs.reset_hunk, "Gitsigns: reset hunk")
+
+          map("n", "]c", function()
+            if vim.wo.diff then return "]c" end
+            vim.schedule(gs.next_hunk)
+            return "<Ignore>"
+          end, "Gitsigns: next hunk")
+          map("n", "[c", function()
+            if vim.wo.diff then return "[c" end
+            vim.schedule(gs.prev_hunk)
+            return "<Ignore>"
+          end, "Gitsigns: previous hunk")
+        end,
       })
     end,
+  },
+
+  -- Diffview (rich in-editor git diff / history viewer)
+  {
+    "sindrets/diffview.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewToggleFiles", "DiffviewRefresh" },
+    keys = {
+      { "<leader>gv", ":DiffviewOpen<CR>",          noremap = true, silent = true, desc = "Diffview: open" },
+      { "<leader>gV", ":DiffviewClose<CR>",         noremap = true, silent = true, desc = "Diffview: close" },
+      { "<leader>gh", ":DiffviewFileHistory<CR>",   noremap = true, silent = true, desc = "Diffview: branch file history" },
+      { "<leader>gH", ":DiffviewFileHistory %<CR>", noremap = true, silent = true, desc = "Diffview: current file history" },
+    },
+    opts = {
+      enhanced_diff_hl = true,
+      view = {
+        merge_tool = { layout = "diff3_mixed" },
+      },
+    },
   },
 
   -- Spellwarn (renders spell errors as diagnostics)
