@@ -140,6 +140,23 @@ Gitsigns keymaps are buffer-local and only active in tracked files.
 Useful Diffview commands: `:DiffviewOpen <rev>`, `:DiffviewOpen HEAD~3..HEAD`,
 `:DiffviewOpen origin/main...HEAD` to review a branch/PR.
 
+### Reviewing a branch from the shell
+
+For when you'd rather walk files one-by-one from the terminal instead of
+Diffview. Assumes `git config --global diff.tool nvimdiff` is set.
+
+| Command                              | Action                                  |
+| ------------------------------------ | --------------------------------------- |
+| `git diff --stat develop`            | Summary of changed files vs `develop`   |
+| `git diff --name-only develop`       | Just the list of changed files          |
+| `git difftool develop`               | Walk each changed file in nvimdiff      |
+| `git difftool -y develop`            | Same, but skip the "launch editor?" prompt |
+| `git difftool develop -- <path>`     | Diff a single file against `develop`    |
+
+Inside each nvimdiff split: `]c` / `[c` jump to next/previous hunk,
+`do` pulls the change in (diff-obtain), `dp` pushes it out (diff-put),
+`:qa` closes the pair and moves to the next file.
+
 ## Copilot Chat
 
 | Key         | Action      | Source        |

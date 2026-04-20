@@ -53,16 +53,20 @@ return {
           map("n", "<leader>gs", gs.stage_hunk, "Gitsigns: stage hunk")
           map("n", "<leader>gr", gs.reset_hunk, "Gitsigns: reset hunk")
 
-          map("n", "]c", function()
+          -- expr = true is required so the returned "]c" / "[c" strings are
+          -- evaluated as the builtin diff-mode motion when vim.wo.diff is set.
+          -- Without it the string is discarded and the key silently no-ops in
+          -- the right-hand window of `git difftool`.
+          vim.keymap.set("n", "]c", function()
             if vim.wo.diff then return "]c" end
             vim.schedule(gs.next_hunk)
             return "<Ignore>"
-          end, "Gitsigns: next hunk")
-          map("n", "[c", function()
+          end, { buffer = bufnr, silent = true, expr = true, desc = "Gitsigns: next hunk" })
+          vim.keymap.set("n", "[c", function()
             if vim.wo.diff then return "[c" end
             vim.schedule(gs.prev_hunk)
             return "<Ignore>"
-          end, "Gitsigns: previous hunk")
+          end, { buffer = bufnr, silent = true, expr = true, desc = "Gitsigns: previous hunk" })
         end,
       })
     end,

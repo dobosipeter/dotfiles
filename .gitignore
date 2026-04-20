@@ -1,1 +1,3 @@
 nvim/lazy-lock.json
+copilot-instructions.local.md
+setup-devcontainer.sh
