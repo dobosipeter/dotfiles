@@ -91,7 +91,24 @@ return {
         footer = { 'You typod your quote file path. -Me' }
       end
       dashboard.section.footer.val = footer
+      -- Workaround: foot terminal sends a phantom CR ~50ms after startup
+      -- (confirmed with --clean, see neovim/neovim#34497). Delay autostart
+      -- so the phantom CR arrives before alpha's <CR> keymaps are active.
+      if (vim.env.TERM or ""):match("^foot") then
+        dashboard.config.opts = { autostart = false }
+      end
       require'alpha'.setup(dashboard.config)
+      if (vim.env.TERM or ""):match("^foot") then
+        vim.api.nvim_create_autocmd('VimEnter', {
+          once = true,
+          nested = true,
+          callback = function()
+            vim.defer_fn(function()
+              require('alpha').start(true, dashboard.config)
+            end, 100)
+          end,
+        })
+      end
     end
   },
 
