@@ -55,3 +55,13 @@ vim.api.nvim_create_autocmd("FileType", {
 --     })
 --   end,
 -- })
+
+-- Workaround for duplicate backspace/keys in foot terminal due to Kitty Keyboard Protocol (Neovim #31806)
+if (vim.env.TERM or ""):match("^foot") then
+  vim.api.nvim_create_autocmd({ "VimEnter", "VimResume" }, {
+    group = vim.api.nvim_create_augroup("FootBackspaceFix", { clear = true }),
+    callback = function()
+      io.stdout:write("\x1b[<u")
+    end,
+  })
+end
