@@ -125,7 +125,6 @@ if [ -f "$HOME/.zshrc.local" ]; then
 fi
 export PATH="$PATH:$HOME/.local/bin"
 # alias powershell="pwsh"
-#alias apva="ssh LaVM"
 # Add nvim appimage bin to PATH if it exists
 if [ -d "/opt/nvim-linux-x86_64/bin" ]; then
   export PATH="$PATH:/opt/nvim-linux-x86_64/bin"

@@ -96,7 +96,7 @@ return {
     "ravibrock/spellwarn.nvim",
     event = "VeryLazy",
     config = function()
-      require("spellwarn").setup()
+      require("spellwarn").setup({})
     end,
   },
 

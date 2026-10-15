@@ -1,0 +1,36 @@
+diff --git a/scripts/reload_sessions.sh b/scripts/reload_sessions.sh
+index ffd38d4..b9f88b0 100755
+--- a/scripts/reload_sessions.sh
++++ b/scripts/reload_sessions.sh
+@@ -5,10 +5,9 @@ source "$CURRENT_DIR/git-branch.sh"
+ CURRENT_SESSION=$(tmux display-message -p '#S')
+ SESSIONS=$(tmux list-sessions | sed -E 's/:.*$//')
+ 
+-if [[ $(echo "$SESSIONS" | wc -l) -gt 1 ]]; then
+-	SESSIONS=$(echo "$SESSIONS" | grep -v "$CURRENT_SESSION")
+-else
+-	true
++FILTER_CURRENT=$(tmux show-option -gqv "@sessionx-_filter-current")
++if [[ "$FILTER_CURRENT" == "true" && $(printf '%s\n' "$SESSIONS" | wc -l) -gt 1 ]]; then
++	SESSIONS=$(printf '%s\n' "$SESSIONS" | grep -Fxv -- "$CURRENT_SESSION")
+ fi
+ 
+ GIT_BRANCH=$(tmux show-option -gqv "@sessionx-git-branch")
+diff --git a/scripts/sessionx.sh b/scripts/sessionx.sh
+index fd6acb0..96fb6f4 100755
+--- a/scripts/sessionx.sh
++++ b/scripts/sessionx.sh
+@@ -105,8 +105,11 @@ handle_output() {
+ 			target=$d_target
+ 		else
+ 			if [[ "$Z_MODE" == "on" ]]; then
+-				z_target=$(zoxide query "$target")
+-				tmux new-session -ds "$target" -c "$z_target" -n "$z_target"
++				if z_target=$(zoxide query "$target" 2>/dev/null) && [[ -n "$z_target" && -d "$z_target" ]]; then
++					tmux new-session -ds "$target" -c "$z_target"
++				else
++					tmux new-session -ds "$target"
++				fi
+ 			else
+ 				tmux new-session -ds "$target"
+ 			fi
